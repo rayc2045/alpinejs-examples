@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="icon" href="https://alpinejs.dev/favicon.png" />
+    <title>Alpine.js Example - Cards with Search</title>
+    <link
+      href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.8/cdn.min.js"
+      defer
+    ></script>
+    <script defer>
+      function init() {
+        return {
+          pinLength: 6,
+          reset(i) {
+            for (x = 0; x < this.pinLength; x++) {
+              if (x >= i) document.getElementById(`pin${x}`).value = "";
+            }
+          },
+          forward(i) {
+            document.getElementById(`pin${i}`).value = document
+              .getElementById(`pin${i}`)
+              .value.replace(/[^0-9]/, "");
+            if (
+              document.getElementById(`pin${i + 1}`) &&
+              document.getElementById(`pin${i}`).value &&
+              i != this.pinlength - 1
+            ) {
+              document.getElementById(`pin${i + 1}`).focus();
+              document.getElementById(`pin${i + 1}`).value = "";
+            }
+          },
+          back(i) {
+            if (
+              document.getElementById(`pin${i}`) &&
+              document.getElementById(`pin${i}`).value
+            ) {
+              return this.reset(i);
+            }
+            if (
+              document.getElementById(`pin${i - 1}`) &&
+              document.getElementById(`pin${i - 1}`).value &&
+              i != 0
+            ) {
+              document.getElementById(`pin${i - 1}`).focus();
+              document.getElementById(`pin${i - 1}`).value = "";
+            }
+          },
+        };
+      }
+    </script>
+  </head>
+  <body>
+    <div
+      class="min-w-screen min-h-screen bg-gray-300 flex items-center justify-center px-5 py-5"
+    >
+      <div x-data="init">
+        <div class="mb-16">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/7/74/Apple_logo_dark_grey.svg"
+            class="w-16 block mx-auto"
+          />
+        </div>
+        <div class="pb-4 text-sm text-center text-gray-600">
+          Enter your PIN to unlock this Mac.
+        </div>
+        <div class="flex justify-center">
+          <template x-for="i in pinLength" :key="`pin${i}`">
+            <input
+              :autofocus="i === 0"
+              :id="`pin${i}`"
+              class="h-12 w-10 border mx-1 rounded-md flex items-center text-center font-thin text-3xl shadow-inner border-t-2 border-b-0 border-gray-400 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              value=""
+              maxlength="1"
+              max="9"
+              min="0"
+              inputmode="decimal"
+              @keyup="forward(i)"
+              @keydown.backspace="back(i)"
+              @focus="reset(i)"
+              autocomplete="none"
+            />
+          </template>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
