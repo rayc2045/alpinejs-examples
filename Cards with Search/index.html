@@ -186,29 +186,28 @@
         },
       ];
 
-      function loadEmployees() {
-        return {
-          search: "",
-          data: sourceData,
-          get filteredEmployees() {
-            return this.search === ""
-              ? this.data
-              : this.data.filter((item) =>
-                  item.employee_name
-                    .toLowerCase()
-                    .includes(this.search.toLowerCase()),
-                );
-          },
-        };
-      }
+      const EmployeeSearch = {
+        search: "",
+        data: sourceData,
+        get filteredEmployees() {
+          return this.search === ""
+            ? this.data
+            : this.data.filter((item) =>
+                item.employee_name
+                  .toLowerCase()
+                  .includes(this.search.toLowerCase()),
+              );
+        },
+      };
     </script>
   </head>
 
   <body class="bg-grey-100 px-3 py-8 font-sans leading-normal tracking-normal">
-    <div class="container mx-auto" x-data="loadEmployees">
+    <div class="container mx-auto" x-data="EmployeeSearch">
       <input
         x-ref="searchField"
         x-model="search"
+        autofocus
         x-on:keydown.window.prevent.slash="$refs.searchField.focus()"
         placeholder="Search for an employee..."
         type="search"
